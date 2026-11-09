@@ -3637,6 +3637,29 @@ reveal_type(f(g("a")))  # revealed: tuple[Literal["a"] | None, int]
 reveal_type(g(f("a")))  # revealed: tuple[Literal["a"], int] | None
 ```
 
+When checking `first(wrap(value))` against `T | None`, inferring the list element type from `value`
+preserves the caller's `T`.
+
+```py
+def first[T](items: list[T]) -> T | None:
+    return items[0] if items else None
+
+def wrap[T](value: T) -> list[T]:
+    return [value]
+
+def find[T](value: T) -> T | None:
+    result: T | None = first(wrap(value))
+    reveal_type(result)  # revealed: T@find | None
+    return result
+```
+
+The same applies to the iterator passed to `next` when the caller's type variable has a bound.
+
+```py
+def first_int[T: int](values: list[T]) -> T | None:
+    return next(iter(values), None)
+```
+
 ## Passing generic functions to generic functions
 
 `functions.pyi`:

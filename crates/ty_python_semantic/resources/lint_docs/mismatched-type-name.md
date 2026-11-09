@@ -25,4 +25,8 @@ mismatched-namedtuple-name = "ignore"
 On the command line, the last matching flag takes precedence.
 `ty check --error mismatched-type-name --ignore mismatched-namedtuple-name` applies the same policy.
 
-The separate `mismatched-sentinel-name` rule remains opt-in.
+`mismatched-enum-name` and `mismatched-namedtuple-name` are disabled by default. An explicit setting
+for `mismatched-type-name` still sets their severity.
+
+To check dynamic classes or sentinels, enable `mismatched-dynamic-type-name` or
+`mismatched-sentinel-name` separately.

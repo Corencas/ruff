@@ -7,6 +7,7 @@ individual kind of type takes precedence within the same table.
 
 ```toml
 [rules]
+all = "warn"
 mismatched-type-name = "ignore"
 mismatched-typevar-name = "error"
 ```
@@ -34,6 +35,13 @@ error[mismatched-typevar-name]: The name passed to `TypeVar` must match the vari
    |
 14 | T = TypeVar("U")
    |             ^^^ Expected "T", got "U"
+```
+
+The old setting covers the original eight kinds of type. With the dynamic class rule enabled, ty can
+still report a mismatched name here:
+
+```py
+Entry = type("Record", (), {})  # error: [mismatched-dynamic-type-name]
 ```
 
 ## Existing ignore comments

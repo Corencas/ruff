@@ -49,7 +49,7 @@ use crate::types::context::LintDiagnosticGuardBuilder;
 use crate::types::cyclic::PairVisitor;
 use crate::types::dedicated::pydantic::{self, ConfigBoolean};
 use crate::types::diagnostic::{
-    CALL_NON_CALLABLE, CALL_TOP_CALLABLE, INVALID_ARGUMENT_TYPE, INVALID_DATACLASS,
+    CALL_NON_CALLABLE, CALL_TO_TOP_CALLABLE, INVALID_ARGUMENT_TYPE, INVALID_DATACLASS,
     MISSING_ARGUMENT, NO_MATCHING_OVERLOAD, PARAMETER_ALREADY_ASSIGNED,
     POSITIONAL_ONLY_PARAMETER_AS_KWARG, TOO_MANY_POSITIONAL_ARGUMENTS, UNKNOWN_ARGUMENT,
     add_invariant_generic_hints, note_numbers_module_not_supported,
@@ -10895,7 +10895,7 @@ impl<'db> BindingError<'db> {
 
             Self::CalledTopCallable(callable_ty) => {
                 let range = context.get_range(node, None);
-                if let Some(builder) = context.report_lint(&CALL_TOP_CALLABLE, range) {
+                if let Some(builder) = context.report_lint(&CALL_TO_TOP_CALLABLE, range) {
                     let callable_ty_display = callable_ty.display(db, env);
                     let mut diag = builder.into_diagnostic(format_args!(
                         "Object of type `{callable_ty_display}` is not safe to call; \

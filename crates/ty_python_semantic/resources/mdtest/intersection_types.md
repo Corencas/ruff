@@ -1258,7 +1258,7 @@ info: Attempted to call intersection type `type[UsesInit] & type[UsesNew]`
 
 When intersection elements fail with different error types, we use a priority hierarchy to determine
 which errors to show. More specific errors (like `invalid-argument-type`) take precedence over less
-specific ones (like `call-top-callable` or `call-non-callable`).
+specific ones (like `call-to-top-callable` or `call-non-callable`).
 
 A specific argument error takes priority over a top-callable error:
 
@@ -1270,7 +1270,7 @@ def _(
     x: Callable[[int], str] & Top[Callable[..., object]],
 ) -> None:
     # `Callable[[int], str]` fails with invalid-argument-type (expects int, got str)
-    # `Top[Callable[..., object]]` would fail with call-top-callable
+    # `Top[Callable[..., object]]` would fail with call-to-top-callable
     # We only show the more specific invalid-argument-type error
     # error: [invalid-argument-type]
     x("hello")
@@ -1308,10 +1308,11 @@ class NotCallable: ...
 def _(
     x: Top[Callable[..., object]] & NotCallable,
 ) -> None:
-    # `Top[Callable[..., object]]` fails with call-top-callable
+    # `Top[Callable[..., object]]` fails with call-to-top-callable
     # `NotCallable` would fail with call-non-callable
-    # We only show the call-top-callable error (it's more specific)
-    # error: [call-top-callable]
+    # We only show the call-to-top-callable error (it's more specific)
+    #
+    # error: [call-to-top-callable]
     reveal_type(x())  # revealed: object
 ```
 
@@ -1452,7 +1453,7 @@ def _(
 
     # When called with a string argument:
     # - The intersection element: Callable[[int], A] fails (wrong type),
-    #   Top[...] would fail with call-top-callable. Due to priority hierarchy,
+    #   Top[...] would fail with call-to-top-callable. Due to priority hierarchy,
     #   only the invalid-argument-type error is shown for the intersection.
     # - The Callable[[str], int] element succeeds.
     # The return type includes both elements' return types:
@@ -1504,7 +1505,7 @@ def _(
 
     # When called with no arguments:
     # - The intersection element: Callable[[int], A] fails (missing argument),
-    #   Top[...] would fail with call-top-callable. Due to priority hierarchy,
+    #   Top[...] would fail with call-to-top-callable. Due to priority hierarchy,
     #   only the missing-argument error is shown.
     # - The Callable[[str], int] also fails (missing argument).
     # error: [missing-argument]

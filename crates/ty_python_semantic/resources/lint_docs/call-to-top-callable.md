@@ -24,3 +24,9 @@ def f(x: object):
         # We know `x` is callable, but not what arguments it accepts
         x()  # error
 ```
+
+## Rule history
+
+- v0.0.101: Renamed from `call-top-callable`.
+
+    `call-top-callable` remains as a compatibility alias for this rule.
